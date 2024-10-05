@@ -26,7 +26,7 @@ const listings: ListingData[] = [
   {
     image: "https://example.com/property1.jpg",
     title: "Beautiful Beachfront Villa",
-    propertyType: "Entire home",
+    propertyType: "Trending",
     guests: 4,
     bedrooms: 2,
     bathrooms: 2,
@@ -36,7 +36,7 @@ const listings: ListingData[] = [
   {
     image: "https://example.com/property1.jpg",
     title: "Beautiful Beachfront Villa",
-    propertyType: "Entire home",
+    propertyType: "Luxury",
     guests: 4,
     bedrooms: 2,
     bathrooms: 2,
@@ -46,7 +46,7 @@ const listings: ListingData[] = [
   {
     image: "https://example.com/property1.jpg",
     title: "Beautiful Beachfront Villa",
-    propertyType: "Entire home",
+    propertyType: "Urban",
     guests: 4,
     bedrooms: 2,
     bathrooms: 2,
