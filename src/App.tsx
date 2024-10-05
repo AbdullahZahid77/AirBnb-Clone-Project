@@ -2,7 +2,7 @@ import "./App.css";
 import Horilist from "./Horilist";
 import Navbar from "./Navbar";
 import Listingcard from "./Listingcard";
-// import Footer from "./Footer";
+import Footer from "./Footer";
 function App() {
   return (
     <>
@@ -20,7 +20,7 @@ function App() {
           rating={4.8}
         />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
