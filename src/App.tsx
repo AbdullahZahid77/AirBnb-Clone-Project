@@ -7,9 +7,9 @@ import Footer from "./Footer";
 function App() {
   return (
     <>
-      <Horilist />
       <Navbar />
-      <Listings /> {/* Use the Listings component */}
+      <Horilist />
+      <Listings />
       <Footer />
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ListingcardProps {
   image: string;
@@ -21,25 +21,53 @@ const Listingcard: React.FC<ListingcardProps> = ({
   pricePerNight,
   rating,
 }) => {
+  // State to toggle details view
+  const [showDetails, setShowDetails] = useState(false);
+
+  // State to track if the listing is "favorited"
+  const [isFavorited, setIsFavorited] = useState(false);
+
   return (
-    <div className="max-w-sm bg-white shadow-md rounded-lg overflow-hidden">
+    <div
+      className="max-w-sm bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl" // Apply hover effect here
+    >
       {/* Property Image */}
       <img src={image} alt={title} className="w-full h-48 object-cover" />
 
       {/* Property Details */}
       <div className="p-4">
-        {/* Property Title */}
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        {/* Property Title and Favorite Button */}
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <button
+            onClick={() => setIsFavorited(!isFavorited)} // Toggle favorite
+            className={`${
+              isFavorited ? "text-red-500" : "text-gray-400"
+            } hover:text-red-500 transition-colors duration-200`}
+          >
+            {isFavorited ? "♥" : "♡"}
+          </button>
+        </div>
 
         {/* Property Type */}
         <p className="text-gray-600">{propertyType}</p>
 
-        {/* Property Info (Guests, Bedrooms, Bathrooms) */}
-        <div className="mt-2 flex items-center text-gray-600 text-sm space-x-4">
-          <span>{guests} guests</span>
-          <span>{bedrooms} bedrooms</span>
-          <span>{bathrooms} bathrooms</span>
-        </div>
+        {/* Toggle Details Button */}
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="text-blue-500 text-sm mt-2"
+        >
+          {showDetails ? "Hide Details" : "Show Details"}
+        </button>
+
+        {/* Property Info (Guests, Bedrooms, Bathrooms) - Only show if details are toggled */}
+        {showDetails && (
+          <div className="mt-2 flex items-center text-gray-600 text-sm space-x-4">
+            <span>{guests} guests</span>
+            <span>{bedrooms} bedrooms</span>
+            <span>{bathrooms} bathrooms</span>
+          </div>
+        )}
 
         {/* Price per night */}
         <div className="mt-4 text-gray-900 font-bold text-xl">

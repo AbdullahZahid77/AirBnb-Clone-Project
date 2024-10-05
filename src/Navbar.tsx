@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Navbar: React.FC = () => {
+  // Add state for the active navigation link
+  const [activeLink, setActiveLink] = useState<string>("Home"); // Default active link is "Home"
+
+  // Function to handle link clicks without page reload
+  const handleLinkClick = (link: string) => {
+    setActiveLink(link);
+  };
+
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -9,15 +17,45 @@ const Navbar: React.FC = () => {
 
         {/* Navigation Links */}
         <div className="flex space-x-6">
-          <a href="/" className="text-gray-600 hover:text-blue-600">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent page reload
+              handleLinkClick("Home");
+            }}
+            className={`${
+              activeLink === "Home"
+                ? "text-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
+          >
             Home
           </a>
-          <a href="/experiences" className="text-gray-600 hover:text-blue-600">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent page reload
+              handleLinkClick("Experiences");
+            }}
+            className={`${
+              activeLink === "Experiences"
+                ? "text-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
+          >
             Experiences
           </a>
           <a
-            href="/online-experiences"
-            className="text-gray-600 hover:text-blue-600"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent page reload
+              handleLinkClick("Online Experiences");
+            }}
+            className={`${
+              activeLink === "Online Experiences"
+                ? "text-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
           >
             Online Experiences
           </a>
@@ -47,10 +85,32 @@ const Navbar: React.FC = () => {
 
         {/* User Menu (Login/Signup) */}
         <div className="flex space-x-4">
-          <a href="/login" className="text-gray-600 hover:text-blue-600">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent page reload
+              handleLinkClick("Login");
+            }}
+            className={`${
+              activeLink === "Login"
+                ? "text-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
+          >
             Login
           </a>
-          <a href="/signup" className="text-gray-600 hover:text-blue-600">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); // Prevent page reload
+              handleLinkClick("Signup");
+            }}
+            className={`${
+              activeLink === "Signup"
+                ? "text-blue-600"
+                : "text-gray-600 hover:text-blue-600"
+            }`}
+          >
             Signup
           </a>
         </div>

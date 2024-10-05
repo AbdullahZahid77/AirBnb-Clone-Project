@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const categories = [
   "Beachfront",
@@ -12,6 +12,9 @@ const categories = [
 ];
 
 const Horilist: React.FC = () => {
+  // Add state for the active category
+  const [activeCategory, setActiveCategory] = useState<string>("Trending"); // Default active category
+
   return (
     <div className="w-full overflow-x-auto mt-16">
       {/* Added mt-16 to push it below the navbar */}
@@ -19,7 +22,12 @@ const Horilist: React.FC = () => {
         {categories.map((category) => (
           <button
             key={category}
-            className="bg-gray-200 hover:bg-blue-600 hover:text-white text-gray-700 font-semibold py-2 px-4 rounded-full whitespace-nowrap transition-colors duration-200"
+            onClick={() => setActiveCategory(category)} // Set the clicked category as active
+            className={`${
+              activeCategory === category
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-600 hover:text-white font-semibold py-2 px-4 rounded-full whitespace-nowrap transition-colors duration-200`}
           >
             {category}
           </button>
