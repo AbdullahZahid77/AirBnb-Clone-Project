@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Listingcard from "./Listingcard";
 
 interface ListingData {
+  id: number;
   image: string;
   title: string;
   propertyType: string;
@@ -10,73 +11,27 @@ interface ListingData {
   bathrooms: number;
   pricePerNight: number;
   rating: number;
+  reviews: number;
 }
 
-const listings: ListingData[] = [
-  {
-    image: "https://example.com/property1.jpg",
-    title: "Beautiful Beachfront Villa",
-    propertyType: "Entire home",
-    guests: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 150,
-    rating: 4.8,
-  },
-  {
-    image: "https://example.com/property1.jpg",
-    title: "Beautiful Beachfront Villa",
-    propertyType: "Trending",
-    guests: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 150,
-    rating: 4.8,
-  },
-  {
-    image: "https://example.com/property1.jpg",
-    title: "Beautiful Beachfront Villa",
-    propertyType: "Luxury",
-    guests: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 150,
-    rating: 4.8,
-  },
-  {
-    image: "https://example.com/property1.jpg",
-    title: "Beautiful Beachfront Villa",
-    propertyType: "Urban",
-    guests: 4,
-    bedrooms: 2,
-    bathrooms: 2,
-    pricePerNight: 150,
-    rating: 4.8,
-  },
-  {
-    image: "https://example.com/property2.jpg",
-    title: "Cozy Mountain Cabin",
-    propertyType: "Cabin",
-    guests: 6,
-    bedrooms: 3,
-    bathrooms: 2,
-    pricePerNight: 200,
-    rating: 4.9,
-  },
-  {
-    image: "https://example.com/property3.jpg",
-    title: "Urban Apartment in City Center",
-    propertyType: "Apartment",
-    guests: 2,
-    bedrooms: 1,
-    bathrooms: 1,
-    pricePerNight: 100,
-    rating: 4.5,
-  },
-  // Add more listings as needed
-];
-
 const Listings: React.FC = () => {
+  const [listings, setListings] = useState<ListingData[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/listings")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setListings(data);
+      })
+      .catch((error) => console.error("Error fetching listings:", error));
+  }, []);
+
+  console.log(listings);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
       {listings.map((listing, index) => (

@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE8Ckv-_k3GGZG-2LMsfXCwFBhD58x91PhQw&s",
+    "title": "Beautiful Beachfront Villa",
+    "type": "Entire home",
+    "price": 150,
+    "rating": 4.8,
+    "reviews": 120,
+    "location": "Malibu, California",
+    "description": "This beautiful villa offers a stunning beachfront view with complete privacy and modern amenities. Perfect for a relaxing getaway.",
+    "guests": 6,
+    "bedrooms": 3,
+    "bathrooms": 2
+  },
+  {
+    "id": 2,
+    
+    "title": "Urban Flat",
+    "type": "Entire apartment",
+    "price": 350,
+    "rating": 4.9,
+    "reviews": 89,
+    "location": "New York, NY",
+    "description": "Experience the heart of New York City in this cozy, modern apartment located within walking distance of popular attractions.",
+    "guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  },
+  {
+    "id": 3,
+    
+    "title": "Az House",
+    "type": "Mohalla",
+    "price": 350,
+    "rating": 4.9,
+    "reviews": 89,
+    "location": "Goga Mohalla, Lahore",
+    "description": "Experience the heart of Goga Mohalla in this cozy, modern apartment located within walking distance of popular attractions.",
+    "guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  },
+  {
+    "id": 4,
+    
+    "title": "Butt House",
+    "type": "Farmhouse",
+    "price": 350,
+    "rating": 4.9,
+    "reviews": 89,
+    "location": "Model Town, Lahore",
+    "description": "Experience the heart of farmhouse in this cozy, modern apartment located within walking distance of popular attractions.",
+    "guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  }
+
+]
