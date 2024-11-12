@@ -32,8 +32,8 @@ function App() {
             </>
           }
         />
-        <Route path="/listing-details" element={<ListingDetails />} />
-        <Route path="/booking" element={<Booking />} />
+        <Route path="/listings/:id" element={<ListingDetails />} />
+        <Route path="/book/:id" element={<Booking />} />
       </Routes>
       <Footer />
     </Router>

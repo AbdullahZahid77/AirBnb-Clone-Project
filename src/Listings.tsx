@@ -11,7 +11,6 @@ interface ListingData {
   bathrooms: number;
   pricePerNight: number;
   rating: number;
-  reviews: number;
 }
 
 const Listings: React.FC = () => {
@@ -25,18 +24,16 @@ const Listings: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => {
-        setListings(data);
-      })
+      .then((data) => setListings(data))
       .catch((error) => console.error("Error fetching listings:", error));
   }, []);
 
-  console.log(listings);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
-      {listings.map((listing, index) => (
+      {listings.map((listing) => (
         <Listingcard
-          key={index}
+          key={listing.id}
+          id={listing.id}
           image={listing.image}
           title={listing.title}
           propertyType={listing.propertyType}

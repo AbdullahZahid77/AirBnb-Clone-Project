@@ -1,46 +1,69 @@
 // src/pages/ListingDetails.tsx
 
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-const ListingDetails = () => {
+interface Listing {
+  id: number;
+  image: string;
+  title: string;
+  propertyType: string;
+  guests: number;
+  bedrooms: number;
+  bathrooms: number;
+  pricePerNight: number;
+  rating: number;
+  description: string;
+}
+
+const ListingDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [listing, setListing] = useState<Listing | null>(null);
 
-  const handleBooking = () => {
-    navigate("/booking");
-  };
+  useEffect(() => {
+    // Fetch listing data by ID
+    fetch(`http://localhost:5000/api/listings/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setListing(data);
+      })
+      .catch((error) =>
+        console.error("Error fetching listing details:", error)
+      );
+  }, [id]);
+
+  if (!listing) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 mt-20 space-y-8">
-      {" "}
-      {/* Added mt-20 for top margin */}
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0">
         <img
-          src="https://via.placeholder.com/600"
-          alt="Listing"
+          src={listing.image}
+          alt={listing.title}
           className="w-full md:w-1/2 rounded-lg shadow-md"
         />
         <div className="md:pl-8 space-y-2">
           <h1 className="text-2xl font-semibold text-gray-800">
-            Cozy Beachside Apartment
+            {listing.title}
           </h1>
           <p className="text-sm text-gray-600">
-            Entire apartment • 2 guests • 1 bedroom • 1 bath
+            {listing.propertyType} • {listing.guests} guests •{" "}
+            {listing.bedrooms} bedrooms • {listing.bathrooms} bathrooms
           </p>
-          <div className="flex flex-wrap gap-2 mt-4">
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-700 text-sm">
-              Wi-Fi
-            </span>
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-700 text-sm">
-              Kitchen
-            </span>
-            <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-700 text-sm">
-              Pool
-            </span>
-          </div>
-          <p className="mt-4 text-gray-700">$120 per night</p>
+          <p className="mt-4 text-gray-700">
+            ${listing.pricePerNight} per night
+          </p>
+          <p className="text-gray-600 mt-2">{listing.description}</p>
           <button
-            onClick={handleBooking}
+            onClick={() => navigate(`/book/${id}`)}
             className="mt-6 w-full md:w-auto bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
           >
             Book Now
