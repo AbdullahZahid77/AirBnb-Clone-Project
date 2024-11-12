@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Horilist from "./Horilist";
 import Navbar from "./Navbar";
-import Listings from "./Listings";
 import Footer from "./Footer";
+import Horilist from "./Horilist";
+import Listings from "./Listings";
+import ListingDetails from "./pages/ListingDetails";
+import Booking from "./pages/Booking";
 
 function App() {
   // Using useEffect to trigger the alert 5 seconds after the component mounts
@@ -17,12 +20,23 @@ function App() {
   }, []); // Empty dependency array means this effect runs only once after the initial rendering
 
   return (
-    <>
+    <Router>
       <Navbar />
-      <Horilist />
-      <Listings />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Horilist />
+              <Listings />
+            </>
+          }
+        />
+        <Route path="/listing-details" element={<ListingDetails />} />
+        <Route path="/booking" element={<Booking />} />
+      </Routes>
       <Footer />
-    </>
+    </Router>
   );
 }
 
