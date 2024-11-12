@@ -18,6 +18,12 @@ const Booking: React.FC = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [listing, setListing] = useState<Listing | null>(null);
 
+  // New state for additional fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [numberOfPersons, setNumberOfPersons] = useState(1);
+
   // Fetch listing data by ID
   useEffect(() => {
     fetch(`http://localhost:5000/api/listings/${id}`)
@@ -40,7 +46,8 @@ const Booking: React.FC = () => {
       const days = Math.ceil(
         (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24)
       );
-      const calculatedTotalPrice = days * listing.pricePerNight;
+      const calculatedTotalPrice =
+        days * listing.pricePerNight * numberOfPersons;
       setTotalPrice(calculatedTotalPrice);
     }
   };
@@ -71,6 +78,68 @@ const Booking: React.FC = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* First Name */}
+        <div>
+          <label htmlFor="firstName" className="block text-gray-700">
+            First Name
+          </label>
+          <input
+            type="text"
+            id="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+            required
+          />
+        </div>
+
+        {/* Last Name */}
+        <div>
+          <label htmlFor="lastName" className="block text-gray-700">
+            Last Name
+          </label>
+          <input
+            type="text"
+            id="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+            required
+          />
+        </div>
+
+        {/* Phone Number */}
+        <div>
+          <label htmlFor="phoneNumber" className="block text-gray-700">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+            required
+          />
+        </div>
+
+        {/* Number of Persons */}
+        <div>
+          <label htmlFor="numberOfPersons" className="block text-gray-700">
+            Number of Persons
+          </label>
+          <input
+            type="number"
+            id="numberOfPersons"
+            value={numberOfPersons}
+            onChange={(e) => setNumberOfPersons(Number(e.target.value))}
+            className="w-full border border-gray-300 rounded-lg p-2 mt-1"
+            min="1"
+            required
+          />
+        </div>
+
+        {/* Check-in Date */}
         <div>
           <label htmlFor="checkIn" className="block text-gray-700">
             Check-in Date
@@ -84,6 +153,8 @@ const Booking: React.FC = () => {
             required
           />
         </div>
+
+        {/* Check-out Date */}
         <div>
           <label htmlFor="checkOut" className="block text-gray-700">
             Check-out Date
@@ -97,6 +168,7 @@ const Booking: React.FC = () => {
             required
           />
         </div>
+
         <button
           type="submit"
           className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
