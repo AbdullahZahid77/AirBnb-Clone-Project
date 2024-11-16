@@ -1,5 +1,3 @@
-// src/pages/Booking.tsx
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -176,10 +174,34 @@ const Booking: React.FC = () => {
           Calculate Total
         </button>
       </form>
+
+      {/* Booking Summary */}
       <div className="mt-6 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold text-gray-800">Booking Summary</h2>
-        <p className="mt-2 text-gray-700">{listing.title}</p>
-        <p className="mt-1 text-gray-700">Total Price: ${totalPrice}</p>
+        <p className="mt-2 text-gray-700">
+          <strong>Property:</strong> {listing.title}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>First Name:</strong> {firstName}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Last Name:</strong> {lastName}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Phone Number:</strong> {phoneNumber}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Number of Persons:</strong> {numberOfPersons}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Check-in Date:</strong> {checkInDate}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Check-out Date:</strong> {checkOutDate}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Total Price:</strong> ${totalPrice}
+        </p>
       </div>
     </div>
   );
