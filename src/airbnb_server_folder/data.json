@@ -4,7 +4,7 @@
      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE8Ckv-_k3GGZG-2LMsfXCwFBhD58x91PhQw&s",
     "title": "Beautiful Beachfront Villa",
     "type": "Entire home",
-    "price": 150,
+    "pricePerNight": 150,
     "rating": 4.8,
     "reviews": 120,
     "location": "Malibu, California",
@@ -18,7 +18,7 @@
     
     "title": "Urban Flat",
     "type": "Entire apartment",
-    "price": 350,
+    "pricePerNight": 350,
     "rating": 4.9,
     "reviews": 89,
     "location": "New York, NY",
@@ -32,7 +32,7 @@
     
     "title": "Az House",
     "type": "Mohalla",
-    "price": 350,
+    "pricePerNight": 350,
     "rating": 4.9,
     "reviews": 89,
     "location": "Goga Mohalla, Lahore",
@@ -46,7 +46,7 @@
     
     "title": "Butt House",
     "type": "Farmhouse",
-    "price": 350,
+    "pricePerNight": 350,
     "rating": 4.9,
     "reviews": 89,
     "location": "Model Town, Lahore",

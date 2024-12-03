@@ -7,17 +7,17 @@ import Horilist from "./Horilist";
 import Listings from "./Listings";
 import ListingDetails from "./pages/ListingDetails";
 import Booking from "./pages/Booking";
+import Register from "./Register"; // Import Register Component
+import Login from "./Login"; // Import Login Component
 
-function App() {
-  // Using useEffect to trigger the alert 5 seconds after the component mounts
+const App: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       alert("Use code ABDULLAH-ZAHID for 30% OFF");
-    }, 5000); // Delay of 5000ms (5 seconds)
+    }, 5000);
 
-    // Clean up the timeout in case the component unmounts before the timer finishes
     return () => clearTimeout(timer);
-  }, []); // Empty dependency array means this effect runs only once after the initial rendering
+  }, []);
 
   return (
     <Router>
@@ -34,10 +34,12 @@ function App() {
         />
         <Route path="/listings/:id" element={<ListingDetails />} />
         <Route path="/book/:id" element={<Booking />} />
+        <Route path="/register" element={<Register />} /> {/* Register Route */}
+        <Route path="/login" element={<Login />} /> {/* Login Route */}
       </Routes>
       <Footer />
     </Router>
   );
-}
+};
 
 export default App;
