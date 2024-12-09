@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface ListingcardProps {
-  id: number;
+  id: string; // Use string for MongoDB `_id`
   image: string;
   title: string;
   propertyType: string;

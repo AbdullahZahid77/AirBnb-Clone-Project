@@ -1,0 +1,11 @@
+id,title,type,pricePerNight,rating,reviews,location,description,guests,bedrooms,bathrooms,host,images
+1,Cozy Cottage,Apartment,120,4.5,32,New York,"A beautiful, cozy cottage in the heart of New York City.",4,2,1,641c7b5b2a72f243cc123456,"image1.jpg;image2.jpg"
+2,Modern Studio,Studio,95,4.8,25,San Francisco,"A modern studio with all the amenities you need.",2,1,1,641c7b5b2a72f243cc123457,"image3.jpg;image4.jpg"
+3,Luxury Villa,Farmhouse,350,5.0,15,Los Angeles,"A luxurious villa with a private pool and stunning views.",8,4,3,641c7b5b2a72f243cc123458,"image5.jpg;image6.jpg"
+4,Beachside Bungalow,Bungalow,200,4.7,18,Miami,"A charming bungalow just steps away from the beach.",6,3,2,641c7b5b2a72f243cc123459,"image7.jpg;image8.jpg"
+5,Mountain Retreat,Cabin,175,4.9,20,Denver,"A peaceful retreat in the mountains with breathtaking views.",5,2,1,641c7b5b2a72f243cc123450,"image9.jpg;image10.jpg"
+6,Urban Loft,Apartment,150,4.6,30,Chicago,"A stylish loft in the city center, perfect for professionals.",3,1,1,641c7b5b2a72f243cc123451,"image11.jpg;image12.jpg"
+7,Lakefront Cottage,Cabin,140,4.8,22,Seattle,"A quaint cottage by the lake, ideal for a relaxing getaway.",4,2,1,641c7b5b2a72f243cc123452,"image13.jpg;image14.jpg"
+8,Hilltop Mansion,Farmhouse,400,5.0,10,Austin,"A grand mansion on a hilltop with a panoramic view.",10,5,4,641c7b5b2a72f243cc123453,"image15.jpg;image16.jpg"
+9,Suburban Family Home,House,130,4.5,35,Boston,"A spacious family home in a quiet suburban neighborhood.",6,3,2,641c7b5b2a72f243cc123454,"image17.jpg;image18.jpg"
+10,Chic Downtown Condo,Condo,180,4.7,28,Atlanta,"A chic condo in downtown, close to major attractions.",2,1,1,641c7b5b2a72f243cc123455,"image19.jpg;image20.jpg"
