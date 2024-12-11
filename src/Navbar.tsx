@@ -66,6 +66,8 @@ const Navbar: React.FC = () => {
           >
             Online Experiences
           </Link>
+
+          {/* Admin Panel Link */}
           {isAdmin && (
             <Link
               to="/admin"
@@ -78,6 +80,34 @@ const Navbar: React.FC = () => {
             >
               Admin Panel
             </Link>
+          )}
+
+          {/* User Profile and Booking History Links */}
+          {isAuthenticated && (
+            <>
+              <Link
+                to="/profile"
+                onClick={() => handleLinkClick("Profile")}
+                className={`${
+                  activeLink === "Profile"
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
+                }`}
+              >
+                Profile
+              </Link>
+              <Link
+                to="/booking-history"
+                onClick={() => handleLinkClick("Booking History")}
+                className={`${
+                  activeLink === "Booking History"
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
+                }`}
+              >
+                Booking History
+              </Link>
+            </>
           )}
         </div>
 

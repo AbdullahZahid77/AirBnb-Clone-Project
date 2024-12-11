@@ -7,11 +7,12 @@ import Horilist from "./Horilist";
 import Listings from "./Listings";
 import ListingDetails from "./pages/ListingDetails";
 import Booking from "./pages/Booking";
-import Register from "./Register"; // Import Register Component
-import Login from "./Login"; // Import Login Component
+import Register from "./Register";
+import Login from "./Login";
 import AdminDashboard from "./admin/AdminDashboard";
-import AdminListings from "./admin/AdminListings";
-import AdminBookings from "./admin/AdminBookings";
+import Profile from "./pages/Profile"; // Add your user profile page
+import BookingHistory from "./pages/BookingHistory"; // Add your booking history page
+import ProtectedRoute from "./ProtectedRoute";
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -26,6 +27,7 @@ const App: React.FC = () => {
     <Router>
       <Navbar />
       <Routes>
+        {/* Public Routes */}
         <Route
           path="/"
           element={
@@ -37,12 +39,34 @@ const App: React.FC = () => {
         />
         <Route path="/listings/:id" element={<ListingDetails />} />
         <Route path="/book/:id" element={<Booking />} />
-        <Route path="/register" element={<Register />} /> {/* Register Route */}
-        <Route path="/login" element={<Login />} /> {/* Login Route */}
-        {/* Admin Panel Routes */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/listings" element={<AdminListings />} />
-        <Route path="/admin/bookings" element={<AdminBookings />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/booking-history"
+          element={
+            <ProtectedRoute>
+              <BookingHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </Router>
