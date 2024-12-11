@@ -118,7 +118,7 @@ app.get('/api/listings/:id', async (req, res) => {
 
 // 5. POST /api/bookings: Create a booking
 // New route to make 'api/bookings/user/:id
-// validatetoken ka backend
+// validatetoken ka backend api/auth/validate  token lay ga will verify and return user from mongo
 app.post('/api/bookings', authenticateToken, async (req, res) => {
   const { property, firstName, lastName, phoneNumber, numberOfPersons, startDate, endDate, totalPrice } = req.body;
 
@@ -141,6 +141,56 @@ app.post('/api/bookings', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Error creating booking', error: err.message });
   }
 });
+
+
+// POST /api/auth/validate: Validate a token and return the user object
+app.post('/api/auth/validate', async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Fetch the user from MongoDB
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Token is valid', user });
+  } catch (err) {
+    res.status(401).json({ message: 'Invalid or expired token', error: err.message });
+  }
+});
+
+
+
+// GET /api/bookings/user/:id: Fetch all bookings for a specific user
+app.get('/api/bookings/user/:id', authenticateToken, async (req, res) => {
+  const userId = req.params.id;
+
+  // Ensure the logged-in user is either the user themselves or an admin
+  if (req.user.id !== userId && !req.user.isAdmin) {
+    return res.status(403).json({ message: 'Access denied' });
+  }
+
+  try {
+    const userBookings = await Booking.find({ userId }).populate('property', 'title location pricePerNight');
+    if (userBookings.length === 0) {
+      return res.status(404).json({ message: 'No bookings found for this user' });
+    }
+
+    res.status(200).json(userBookings);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching user bookings', error: err.message });
+  }
+});
+
+
 
 // 6. Admin Endpoints
 // GET /api/admin/listings: View all listings

@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
 
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/bookings/user/${user._id}`,
+            `http://localhost:5000/api/bookings/user/${user.id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
