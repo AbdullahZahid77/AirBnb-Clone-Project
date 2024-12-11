@@ -45,7 +45,7 @@ const AddListing: React.FC = () => {
 
       const newListing = await response.json();
       console.log("Listing added successfully:", newListing);
-      navigate("/listings-management"); // Redirect back to the listings management page
+      navigate("/"); // Redirect back to the listings management page
     } catch (error) {
       console.error("Error adding listing:", error);
     }

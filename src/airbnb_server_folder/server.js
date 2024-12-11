@@ -230,11 +230,23 @@ app.post('/api/admin/listings', authenticateToken, async (req, res) => {
     return res.status(403).json({ message: 'Access denied' });
   }
 
-  const { id, title, type, pricePerNight, rating, reviews, location, description, guests, bedrooms, bathrooms, host, images } = req.body;
+  const {
+    title,
+    type,
+    pricePerNight,
+    rating,
+    reviews,
+    location,
+    description,
+    guests,
+    bedrooms,
+    bathrooms,
+    images,
+  } = req.body;
 
   try {
     const newProperty = new Property({
-      id,
+      id: Math.floor(Math.random() * 1000000), // Generate a random ID for demonstration purposes
       title,
       type,
       pricePerNight,
@@ -245,17 +257,18 @@ app.post('/api/admin/listings', authenticateToken, async (req, res) => {
       guests,
       bedrooms,
       bathrooms,
-      host,
+      host: req.user.id, // Set the host as the authenticated user
       images,
     });
 
     await newProperty.save();
     res.status(201).json({ message: 'Listing created successfully', newProperty });
   } catch (err) {
-    console.error("Error adding listing:", err);
+    console.error('Error adding listing:', err);
     res.status(500).json({ message: 'Error creating listing', error: err.message });
   }
 });
+
 
 // DELETE /api/admin/listings/:id: Delete a listing
 app.delete('/api/admin/listings/:id', authenticateToken, async (req, res) => {
