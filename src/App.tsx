@@ -9,6 +9,9 @@ import ListingDetails from "./pages/ListingDetails";
 import Booking from "./pages/Booking";
 import Register from "./Register"; // Import Register Component
 import Login from "./Login"; // Import Login Component
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminListings from "./admin/AdminListings";
+import AdminBookings from "./admin/AdminBookings";
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -36,6 +39,10 @@ const App: React.FC = () => {
         <Route path="/book/:id" element={<Booking />} />
         <Route path="/register" element={<Register />} /> {/* Register Route */}
         <Route path="/login" element={<Login />} /> {/* Login Route */}
+        {/* Admin Panel Routes */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/listings" element={<AdminListings />} />
+        <Route path="/admin/bookings" element={<AdminBookings />} />
       </Routes>
       <Footer />
     </Router>

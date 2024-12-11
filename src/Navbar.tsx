@@ -6,6 +6,9 @@ const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     !!localStorage.getItem("token")
   ); // Check if user is authenticated
+  const [isAdmin, setIsAdmin] = useState<boolean>(
+    JSON.parse(localStorage.getItem("isAdmin") || "false")
+  ); // Check if user is admin
   const navigate = useNavigate();
 
   const handleLinkClick = (link: string) => {
@@ -14,7 +17,9 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token"); // Clear JWT token from localStorage
+    localStorage.removeItem("isAdmin"); // Clear admin flag
     setIsAuthenticated(false); // Update state
+    setIsAdmin(false); // Reset admin state
     navigate("/login"); // Redirect to login
   };
 
@@ -61,6 +66,19 @@ const Navbar: React.FC = () => {
           >
             Online Experiences
           </Link>
+          {isAdmin && (
+            <Link
+              to="/admin"
+              onClick={() => handleLinkClick("Admin Panel")}
+              className={`${
+                activeLink === "Admin Panel"
+                  ? "text-blue-600"
+                  : "text-gray-600 hover:text-blue-600"
+              }`}
+            >
+              Admin Panel
+            </Link>
+          )}
         </div>
 
         {/* Search Bar */}
