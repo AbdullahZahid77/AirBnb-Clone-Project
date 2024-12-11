@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 interface Listing {
   _id: string;
   title: string;
+  location: string;
   pricePerNight: number;
 }
 
@@ -11,56 +11,80 @@ const ListingsManagement: React.FC = () => {
   const [listings, setListings] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/listings") // Assumed endpoint
-      .then((response) => response.json())
-      .then((data) => setListings(data))
-      .catch((error) => console.error("Error fetching listings:", error));
+    // Fetch listings from API
+    const fetchListings = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/listings");
+        const data = await response.json();
+        setListings(data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    fetchListings();
   }, []);
 
-  const handleDelete = (id: string) => {
-    fetch(`http://localhost:5000/api/admin/listings/${id}`, {
-      method: "DELETE",
-    })
-      .then(() => {
-        setListings(listings.filter((listing) => listing._id !== id));
-      })
-      .catch((error) => console.error("Error deleting listing:", error));
+  const addListing = async () => {
+    const newListing = {
+      title: "New Property",
+      location: "New York",
+      pricePerNight: 100,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/listings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newListing),
+      });
+
+      const createdListing = await response.json();
+      setListings((prev) => [...prev, createdListing]);
+    } catch (error) {
+      console.error("Error adding listing:", error);
+    }
+  };
+
+  const deleteListing = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setListings((prev) => prev.filter((listing) => listing._id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+    }
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Manage Listings</h1>
-      <Link
-        to="/admin/listings/add"
-        className="mb-4 block bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Listings Management</h1>
+      <button
+        onClick={addListing}
+        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
       >
-        Add New Listing
-      </Link>
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 border-b">Title</th>
-            <th className="px-4 py-2 border-b">Price per Night</th>
-            <th className="px-4 py-2 border-b">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listings.map((listing) => (
-            <tr key={listing._id}>
-              <td className="px-4 py-2 border-b">{listing.title}</td>
-              <td className="px-4 py-2 border-b">${listing.pricePerNight}</td>
-              <td className="px-4 py-2 border-b">
-                <button
-                  onClick={() => handleDelete(listing._id)}
-                  className="text-red-500 hover:text-red-600"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        Add Listing
+      </button>
+      <ul>
+        {listings.map((listing) => (
+          <li key={listing._id} className="p-2 border-b">
+            <h3>{listing.title}</h3>
+            <p>{listing.location}</p>
+            <p>${listing.pricePerNight}/night</p>
+            <button
+              onClick={() => deleteListing(listing._id)}
+              className="bg-red-500 text-white px-2 py-1 rounded mt-2"
+            >
+              Delete Listing
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

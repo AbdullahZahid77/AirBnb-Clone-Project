@@ -4,12 +4,10 @@ import { UserContext } from "./context/UserContext";
 
 const Navbar: React.FC = () => {
   const [activeLink, setActiveLink] = useState<string>("Home"); // Default active link
-  const { token, logout } = useContext(UserContext)!;
+  const { user, token, logout } = useContext(UserContext)!;
 
   const isAuthenticated = !!token; // Check if user is authenticated
-  const [isAdmin, setIsAdmin] = useState<boolean>(
-    JSON.parse(localStorage.getItem("isAdmin") || "false")
-  ); // Check if user is admin
+  const isAdmin = user?.isAdmin; // Check if user is admin
   const navigate = useNavigate();
 
   const handleLinkClick = (link: string) => {
@@ -19,8 +17,6 @@ const Navbar: React.FC = () => {
   const handleLogout = () => {
     logout();
     localStorage.removeItem("token"); // Clear JWT token from localStorage
-    localStorage.removeItem("isAdmin"); // Clear admin flag
-    setIsAdmin(false); // Reset admin state
     navigate("/login"); // Redirect to login
   };
 
@@ -110,23 +106,6 @@ const Navbar: React.FC = () => {
               </Link>
             </>
           )}
-        </div>
-
-        {/* Search Bar */}
-        <div className="flex items-center space-x-4">
-          <input
-            type="text"
-            placeholder="Location"
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            placeholder="Search"
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-            Search
-          </button>
         </div>
 
         {/* User Menu (Authentication Links) */}

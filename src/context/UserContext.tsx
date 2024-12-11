@@ -23,10 +23,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     name: string;
     isAdmin: boolean;
   } | null>(JSON.parse(localStorage.getItem("user") || "null"));
-  const [token, setToken] = useState<string | null>("");
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
 
   const isAuthenticated = !!user;
-  const setTokenLocal = (token: any) => {
+
+  const setTokenLocal = (token: string) => {
     localStorage.setItem("token", token);
     setToken(token);
   };
@@ -35,27 +38,29 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    setToken(null);
   };
 
   const validateToken = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setUser(null);
+    const storedToken = localStorage.getItem("token");
+    if (!storedToken) {
+      logout();
       return;
     }
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/validate", {
-        headers: { Authorization: `Bearer ${token}` },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: storedToken }),
       });
 
-      if (!response.ok) throw new Error("Token invalid");
+      if (!response.ok) throw new Error("Token validation failed");
 
       const data = await response.json();
       setUser(data);
       localStorage.setItem("user", JSON.stringify(data));
-    } catch (error) {
-      console.error("Token validation error:", error);
+    } catch (err) {
       logout();
     }
   };

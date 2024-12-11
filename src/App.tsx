@@ -10,10 +10,24 @@ import Booking from "./pages/Booking";
 import Register from "./Register";
 import Login from "./Login";
 import AdminDashboard from "./admin/AdminDashboard";
+import AdminPanel from "./admin/AdminPanel"; // Import AdminPanel
 import Profile from "./pages/Profile"; // Add your user profile page
 import BookingHistory from "./pages/BookingHistory"; // Add your booking history page
 import ProtectedRoute from "./ProtectedRoute";
 import { UserProvider } from "./context/UserContext"; // Import the UserProvider
+
+// Create AdminRoute to restrict access to admins only
+import { useUser } from "./context/UserContext";
+
+const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user } = useUser();
+
+  if (!user || !user.isAdmin) {
+    return <h1 className="text-center text-red-500">Access Denied</h1>;
+  }
+
+  return <>{children}</>;
+};
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -25,7 +39,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <UserProvider> {/* Wrap the app with UserProvider */}
+    <UserProvider>
       <Router>
         <Navbar />
         <Routes>
@@ -61,12 +75,14 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* Admin Routes */}
           <Route
-            path="/admin"
+            path="/admin/*"
             element={
-              <ProtectedRoute adminOnly>
-                <AdminDashboard />
-              </ProtectedRoute>
+              <AdminRoute>
+                <AdminPanel />
+              </AdminRoute>
             }
           />
         </Routes>
