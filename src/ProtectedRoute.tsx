@@ -1,6 +1,6 @@
-// src/components/ProtectedRoute.tsx
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { useUser } from "./context/UserContext"; // Adjust the path as necessary
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,21 +13,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectTo = "/login",
   adminOnly = false,
 }) => {
-  const token = localStorage.getItem("token");
-  const isAuthenticated = !!token;
+  const { user, isAuthenticated } = useUser();
 
-  let isAdmin = false;
-  if (isAuthenticated) {
-    const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
-    isAdmin = decodedToken?.isAdmin || false;
-  }
-
+  // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to={redirectTo} />;
+    return <Navigate to={redirectTo} replace />;
   }
 
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/" />;
+  // Redirect to home if admin access is required but the user is not an admin
+  if (adminOnly && !user?.isAdmin) {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

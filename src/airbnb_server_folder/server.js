@@ -26,7 +26,7 @@ mongoose
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || '6785';
 
 // Helper function: Generate a JWT
 const generateToken = (user) => {

@@ -3,17 +3,22 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 interface UserContextType {
   user: { id: string; name: string; isAdmin: boolean } | null;
   isAuthenticated: boolean;
-  
-  setUser: (user: { id: string; name: string; isAdmin: boolean } | null) => void;
+  setUser: (
+    user: { id: string; name: string; isAdmin: boolean } | null
+  ) => void;
   logout: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ id: string; name: string; isAdmin: boolean } | null>(
-    JSON.parse(localStorage.getItem("user") || "null")
-  );
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<{
+    id: string;
+    name: string;
+    isAdmin: boolean;
+  } | null>(JSON.parse(localStorage.getItem("user") || "null"));
 
   const isAuthenticated = !!user;
 
@@ -24,11 +29,30 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    // Persist user state in localStorage
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    }
-  }, [user]);
+    const validateToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Token invalid");
+
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        console.error("Token validation error:", error);
+        logout();
+      }
+    };
+
+    validateToken();
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, isAuthenticated, setUser, logout }}>

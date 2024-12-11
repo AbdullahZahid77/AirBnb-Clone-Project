@@ -68,13 +68,13 @@ const Booking: React.FC = () => {
       const response = await axios.post(
         "http://localhost:5000/api/bookings",
         {
-          propertyId: id,
+          property: id, // Change propertyId to property
           firstName,
           lastName,
           phoneNumber,
           numberOfPersons,
-          checkInDate,
-          checkOutDate,
+          startDate: checkInDate, // Change checkInDate to startDate
+          endDate: checkOutDate, // Change checkOutDate to endDate
           totalPrice,
         },
         {
@@ -86,10 +86,12 @@ const Booking: React.FC = () => {
 
       if (response.status === 201) {
         alert("Booking successful!");
+        console.log("Token in localStorage:", localStorage.getItem("token"));
         navigate("/profile");
+        // window.location.reload(); //temporary
       }
     } catch (error) {
-      console.error("Error booking property:", error);
+      console.log("Error booking property:", error);
       alert("There was an issue with your booking.");
     }
   };
@@ -117,7 +119,9 @@ const Booking: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Form Fields */}
         <div>
-          <label htmlFor="firstName" className="block text-gray-700">First Name</label>
+          <label htmlFor="firstName" className="block text-gray-700">
+            First Name
+          </label>
           <input
             type="text"
             id="firstName"
@@ -129,7 +133,9 @@ const Booking: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="lastName" className="block text-gray-700">Last Name</label>
+          <label htmlFor="lastName" className="block text-gray-700">
+            Last Name
+          </label>
           <input
             type="text"
             id="lastName"
@@ -141,7 +147,9 @@ const Booking: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="phoneNumber" className="block text-gray-700">Phone Number</label>
+          <label htmlFor="phoneNumber" className="block text-gray-700">
+            Phone Number
+          </label>
           <input
             type="tel"
             id="phoneNumber"
@@ -153,7 +161,9 @@ const Booking: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="numberOfPersons" className="block text-gray-700">Number of Persons</label>
+          <label htmlFor="numberOfPersons" className="block text-gray-700">
+            Number of Persons
+          </label>
           <input
             type="number"
             id="numberOfPersons"
@@ -166,7 +176,9 @@ const Booking: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="checkIn" className="block text-gray-700">Check-in Date</label>
+          <label htmlFor="checkIn" className="block text-gray-700">
+            Check-in Date
+          </label>
           <input
             type="date"
             id="checkIn"
@@ -178,7 +190,9 @@ const Booking: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="checkOut" className="block text-gray-700">Check-out Date</label>
+          <label htmlFor="checkOut" className="block text-gray-700">
+            Check-out Date
+          </label>
           <input
             type="date"
             id="checkOut"
@@ -199,14 +213,30 @@ const Booking: React.FC = () => {
 
       <div className="mt-6 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold text-gray-800">Booking Summary</h2>
-        <p className="mt-2 text-gray-700"><strong>Property:</strong> {listing.title}</p>
-        <p className="mt-1 text-gray-700"><strong>First Name:</strong> {firstName}</p>
-        <p className="mt-1 text-gray-700"><strong>Last Name:</strong> {lastName}</p>
-        <p className="mt-1 text-gray-700"><strong>Phone Number:</strong> {phoneNumber}</p>
-        <p className="mt-1 text-gray-700"><strong>Number of Persons:</strong> {numberOfPersons}</p>
-        <p className="mt-1 text-gray-700"><strong>Check-in Date:</strong> {checkInDate}</p>
-        <p className="mt-1 text-gray-700"><strong>Check-out Date:</strong> {checkOutDate}</p>
-        <p className="mt-1 text-gray-700"><strong>Total Price:</strong> ${totalPrice}</p>
+        <p className="mt-2 text-gray-700">
+          <strong>Property:</strong> {listing.title}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>First Name:</strong> {firstName}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Last Name:</strong> {lastName}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Phone Number:</strong> {phoneNumber}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Number of Persons:</strong> {numberOfPersons}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Check-in Date:</strong> {checkInDate}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Check-out Date:</strong> {checkOutDate}
+        </p>
+        <p className="mt-1 text-gray-700">
+          <strong>Total Price:</strong> ${totalPrice}
+        </p>
       </div>
     </div>
   );
