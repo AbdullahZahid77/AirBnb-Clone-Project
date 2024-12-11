@@ -22,6 +22,7 @@ const Booking: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [numberOfPersons, setNumberOfPersons] = useState(1);
+  const [isTotalCalculated, setIsTotalCalculated] = useState(false); // New state to track calculation
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/listings/${id}`)
@@ -47,6 +48,7 @@ const Booking: React.FC = () => {
       const calculatedTotalPrice =
         days * listing.pricePerNight * numberOfPersons;
       setTotalPrice(calculatedTotalPrice);
+      setIsTotalCalculated(true); // Mark the total as calculated
     }
   };
 
@@ -61,42 +63,52 @@ const Booking: React.FC = () => {
       return;
     }
 
-    calculateTotalPrice();
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("Please log in to book.");
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/bookings",
-        {
-          property: id,
-          firstName,
-          lastName,
-          phoneNumber,
-          numberOfPersons,
-          startDate: checkInDate,
-          endDate: checkOutDate,
-          totalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+    // Synchronously calculate the total price
+    if (listing && checkInDate && checkOutDate) {
+      const days = Math.ceil(
+        (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24)
       );
+      const calculatedTotalPrice =
+        days * listing.pricePerNight * numberOfPersons;
 
-      if (response.status === 201) {
-        alert("Booking successful!");
-        navigate("/profile");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please log in to book.");
+        navigate("/login");
+        return;
       }
-    } catch (error) {
-      console.log("Error booking property:", error);
-      alert("There was an issue with your booking.");
+
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/bookings",
+          {
+            property: id,
+            firstName,
+            lastName,
+            phoneNumber,
+            numberOfPersons,
+            startDate: checkInDate,
+            endDate: checkOutDate,
+            totalPrice: calculatedTotalPrice, // Use calculated total price here
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 201) {
+          alert("Booking successful!");
+          navigate("/profile");
+        }
+      } catch (error) {
+        console.log("Error booking property:", error);
+        alert("There was an issue with your booking.");
+      }
+    } else {
+      alert("Please fill in all fields.");
     }
   };
 
@@ -200,13 +212,27 @@ const Booking: React.FC = () => {
             required
           />
         </div>
+
+        {/* New button to calculate total price */}
         <button
-          type="submit"
-          className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
+          type="button"
+          onClick={calculateTotalPrice}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
         >
-          Confirm Booking
+          Calculate Total
         </button>
+
+        {/* Conditionally show Confirm Booking button after calculating total */}
+        {isTotalCalculated && (
+          <button
+            type="submit"
+            className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg mt-4"
+          >
+            Confirm Booking
+          </button>
+        )}
       </form>
+
       <div className="mt-6 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold text-gray-800">Booking Summary</h2>
         <p className="mt-2 text-gray-700">

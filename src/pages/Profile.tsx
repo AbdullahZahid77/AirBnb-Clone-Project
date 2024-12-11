@@ -5,6 +5,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState<any[]>([]);
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true); // New loading state
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -30,6 +31,8 @@ const Profile = () => {
       } catch (err: any) {
         setError(err.message);
         console.error("Error fetching bookings:", err);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -72,6 +75,10 @@ const Profile = () => {
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
+  if (loading) {
+    return <p className="text-center text-xl text-gray-500">Loading...</p>; // Show loading state
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Your Bookings</h1>
@@ -91,7 +98,8 @@ const Profile = () => {
             >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">
-                  {booking.property.title}
+                  {booking.property ? booking.property.title : "No title"}{" "}
+                  {/* Safe check for property title */}
                 </h2>
                 <button
                   onClick={() => handleDelete(booking._id)}
@@ -110,7 +118,8 @@ const Profile = () => {
               </div>
               <div className="text-gray-700">
                 <span className="font-medium">Price:</span> $
-                {booking.totalPrice.toFixed(2)}
+                {booking.totalPrice ? booking.totalPrice.toFixed(2) : "0.00"}{" "}
+                {/* Safe check for totalPrice */}
               </div>
             </div>
           ))}
