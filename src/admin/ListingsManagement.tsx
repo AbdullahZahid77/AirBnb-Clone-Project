@@ -11,10 +11,21 @@ const ListingsManagement: React.FC = () => {
   const [listings, setListings] = useState<Listing[]>([]);
 
   useEffect(() => {
-    // Fetch listings from API
     const fetchListings = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/listings");
+        const response = await fetch(
+          "http://localhost:5000/api/admin/listings",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
         const data = await response.json();
         setListings(data);
       } catch (error) {
@@ -33,13 +44,18 @@ const ListingsManagement: React.FC = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/listings", {
+      const response = await fetch("http://localhost:5000/api/admin/listings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
         },
         body: JSON.stringify(newListing),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
 
       const createdListing = await response.json();
       setListings((prev) => [...prev, createdListing]);
@@ -50,12 +66,21 @@ const ListingsManagement: React.FC = () => {
 
   const deleteListing = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/listings/${id}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        setListings((prev) => prev.filter((listing) => listing._id !== id));
+      const response = await fetch(
+        `http://localhost:5000/api/admin/listings/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
+
+      setListings((prev) => prev.filter((listing) => listing._id !== id));
     } catch (error) {
       console.error("Error deleting listing:", error);
     }
