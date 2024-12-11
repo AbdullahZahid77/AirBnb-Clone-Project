@@ -1,95 +1,189 @@
 import React, { useState } from "react";
-
-interface ListingFormData {
-  title: string;
-  description: string;
-  location: string;
-  price: number;
-}
+import { useNavigate } from "react-router-dom";
 
 const AddListing: React.FC = () => {
-  const [formData, setFormData] = useState<ListingFormData>({
+  const [formData, setFormData] = useState({
     title: "",
-    description: "",
+    type: "",
+    pricePerNight: 0,
+    rating: 0,
+    reviews: 0,
     location: "",
-    price: 0,
+    description: "",
+    guests: 0,
+    bedrooms: 0,
+    bathrooms: 0,
+    images: "",
   });
 
-  // Updated handleChange function to handle both <input> and <textarea>
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value, // Update the specific field based on the name
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data submitted: ", formData);
-    // Add form submission logic here, like API calls
+
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/listings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const newListing = await response.json();
+      console.log("Listing added successfully:", newListing);
+      navigate("/listings-management"); // Redirect back to the listings management page
+    } catch (error) {
+      console.error("Error adding listing:", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded"
-          placeholder="Enter title"
-        />
-      </div>
-      <div>
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange} // Correct type for textarea
-          placeholder="Enter description"
-          className="w-full px-4 py-2 border rounded"
-        />
-      </div>
-      <div>
-        <label htmlFor="location">Location</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded"
-          placeholder="Enter location"
-        />
-      </div>
-      <div>
-        <label htmlFor="price">Price</label>
-        <input
-          type="number"
-          id="price"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded"
-          placeholder="Enter price"
-        />
-      </div>
-      <div>
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Add New Listing</h1>
+      <form onSubmit={handleFormSubmit}>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Type</label>
+          <input
+            type="text"
+            name="type"
+            value={formData.type}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Price Per Night</label>
+          <input
+            type="number"
+            name="pricePerNight"
+            value={formData.pricePerNight}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Rating</label>
+          <input
+            type="number"
+            name="rating"
+            value={formData.rating}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Reviews</label>
+          <input
+            type="number"
+            name="reviews"
+            value={formData.reviews}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Location</label>
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Description</label>
+          <input
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Guests</label>
+          <input
+            type="number"
+            name="guests"
+            value={formData.guests}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Bedrooms</label>
+          <input
+            type="number"
+            name="bedrooms"
+            value={formData.bedrooms}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Bathrooms</label>
+          <input
+            type="number"
+            name="bathrooms"
+            value={formData.bathrooms}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label>Images (separated by semicolons)</label>
+          <input
+            type="text"
+            name="images"
+            value={formData.images}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          />
+        </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md"
+          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
         >
-          Submit
+          Add Listing
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

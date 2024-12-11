@@ -18,6 +18,7 @@ import { UserProvider } from "./context/UserContext"; // Import the UserProvider
 
 // Create AdminRoute to restrict access to admins only
 import { useUser } from "./context/UserContext";
+import AddListing from "./admin/AddListing"; // Import the AddListing component
 
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useUser();
@@ -82,6 +83,15 @@ const App: React.FC = () => {
             element={
               <AdminRoute>
                 <AdminPanel />
+              </AdminRoute>
+            }
+          />
+          {/* Add Listing Route */}
+          <Route
+            path="/add-listing"
+            element={
+              <AdminRoute>
+                <AddListing /> {/* This is the new Add Listing page */}
               </AdminRoute>
             }
           />

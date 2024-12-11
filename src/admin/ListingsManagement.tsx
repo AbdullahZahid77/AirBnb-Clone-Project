@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Listing {
   _id: string;
@@ -9,6 +10,7 @@ interface Listing {
 
 const ListingsManagement: React.FC = () => {
   const [listings, setListings] = useState<Listing[]>([]);
+  const navigate = useNavigate(); // Initialize useNavigate for routing
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -36,34 +38,12 @@ const ListingsManagement: React.FC = () => {
     fetchListings();
   }, []);
 
-  const addListing = async () => {
-    const newListing = {
-      title: "New Property",
-      location: "New York",
-      pricePerNight: 100,
-    };
-
-    try {
-      const response = await fetch("http://localhost:5000/api/admin/listings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token for authentication
-        },
-        body: JSON.stringify(newListing),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-
-      const createdListing = await response.json();
-      setListings((prev) => [...prev, createdListing]);
-    } catch (error) {
-      console.error("Error adding listing:", error);
-    }
+  // Function to handle adding a listing (navigate to the add listing page)
+  const addListing = () => {
+    navigate("/add-listing"); // Redirect to the add listing page
   };
 
+  // Function to handle deleting a listing
   const deleteListing = async (id: string) => {
     try {
       const response = await fetch(
@@ -80,6 +60,7 @@ const ListingsManagement: React.FC = () => {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
+      // Remove deleted listing from the state
       setListings((prev) => prev.filter((listing) => listing._id !== id));
     } catch (error) {
       console.error("Error deleting listing:", error);
@@ -89,18 +70,24 @@ const ListingsManagement: React.FC = () => {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Listings Management</h1>
+
+      {/* Button to navigate to the Add Listing form */}
       <button
         onClick={addListing}
         className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
       >
         Add Listing
       </button>
+
+      {/* Listings List */}
       <ul>
         {listings.map((listing) => (
           <li key={listing._id} className="p-2 border-b">
-            <h3>{listing.title}</h3>
+            <h3 className="text-lg font-semibold">{listing.title}</h3>
             <p>{listing.location}</p>
             <p>${listing.pricePerNight}/night</p>
+
+            {/* Delete button for each listing */}
             <button
               onClick={() => deleteListing(listing._id)}
               className="bg-red-500 text-white px-2 py-1 rounded mt-2"

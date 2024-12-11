@@ -252,6 +252,7 @@ app.post('/api/admin/listings', authenticateToken, async (req, res) => {
     await newProperty.save();
     res.status(201).json({ message: 'Listing created successfully', newProperty });
   } catch (err) {
+    console.error("Error adding listing:", err);
     res.status(500).json({ message: 'Error creating listing', error: err.message });
   }
 });
