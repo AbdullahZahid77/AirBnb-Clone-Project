@@ -13,6 +13,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 import Profile from "./pages/Profile"; // Add your user profile page
 import BookingHistory from "./pages/BookingHistory"; // Add your booking history page
 import ProtectedRoute from "./ProtectedRoute";
+import { UserProvider } from "./context/UserContext"; // Import the UserProvider
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -24,52 +25,54 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        {/* Public Routes */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Horilist />
-              <Listings />
-            </>
-          }
-        />
-        <Route path="/listings/:id" element={<ListingDetails />} />
-        <Route path="/book/:id" element={<Booking />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+    <UserProvider> {/* Wrap the app with UserProvider */}
+      <Router>
+        <Navbar />
+        <Routes>
+          {/* Public Routes */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Horilist />
+                <Listings />
+              </>
+            }
+          />
+          <Route path="/listings/:id" element={<ListingDetails />} />
+          <Route path="/book/:id" element={<Booking />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Protected Routes */}
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/booking-history"
-          element={
-            <ProtectedRoute>
-              <BookingHistory />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute adminOnly>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-      <Footer />
-    </Router>
+          {/* Protected Routes */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/booking-history"
+            element={
+              <ProtectedRoute>
+                <BookingHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute adminOnly>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        <Footer />
+      </Router>
+    </UserProvider>
   );
 };
 
