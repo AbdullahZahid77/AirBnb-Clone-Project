@@ -170,25 +170,42 @@ app.post('/api/auth/validate', async (req, res) => {
 
 
 // GET /api/bookings/user/:id: Fetch all bookings for a specific user
-app.get('/api/bookings/user/:id', authenticateToken, async (req, res) => {
-  const userId = req.params.id;
-
-  // Ensure the logged-in user is either the user themselves or an admin
-  if (req.user.id !== userId && !req.user.isAdmin) {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-
+// 5. GET /api/bookings: Fetch all bookings for the authenticated user
+app.get('/api/bookings', authenticateToken, async (req, res) => {
   try {
-    const userBookings = await Booking.find({ userId }).populate('property', 'title location pricePerNight');
+    const userBookings = await Booking.find({ userId: req.user.id }).populate('property', 'title location pricePerNight');
     if (userBookings.length === 0) {
       return res.status(404).json({ message: 'No bookings found for this user' });
     }
-
     res.status(200).json(userBookings);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching user bookings', error: err.message });
   }
 });
+
+// 6. DELETE /api/bookings/:id: Delete a specific booking for the authenticated user
+app.delete('/api/bookings/:id', authenticateToken, async (req, res) => {
+  const bookingId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    if (booking.userId.toString() !== userId) {
+      return res.status(403).json({ message: 'You can only delete your own bookings' });
+    }
+
+    await booking.deleteOne();
+    res.status(200).json({ message: 'Booking deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting booking', error: err.message });
+  }
+});
+
 
 
 
