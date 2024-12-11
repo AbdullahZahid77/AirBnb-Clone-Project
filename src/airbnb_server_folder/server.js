@@ -87,7 +87,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.status(200).json({ message: 'Login successful', token });
+    res.status(200).json({ message: 'Login successful', token, user });
   } catch (err) {
     res.status(500).json({ message: 'Error logging in', error: err.message });
   }
@@ -117,6 +117,8 @@ app.get('/api/listings/:id', async (req, res) => {
 });
 
 // 5. POST /api/bookings: Create a booking
+// New route to make 'api/bookings/user/:id
+// validatetoken ka backend
 app.post('/api/bookings', authenticateToken, async (req, res) => {
   const { property, firstName, lastName, phoneNumber, numberOfPersons, startDate, endDate, totalPrice } = req.body;
 

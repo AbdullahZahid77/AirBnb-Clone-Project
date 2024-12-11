@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "./context/UserContext";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const { setTokenLocal, setUser } = useContext(UserContext)!;
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +28,9 @@ const Login: React.FC = () => {
       }
 
       // Save JWT token to localStorage
-      localStorage.setItem("token", data.token);
+      console.log("user", data.user);
+      setTokenLocal(data.token);
+      setUser(data.user);
 
       // Redirect to home page
       navigate("/");

@@ -3,13 +3,17 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 interface UserContextType {
   user: { id: string; name: string; isAdmin: boolean } | null;
   isAuthenticated: boolean;
+  token: string | null;
   setUser: (
     user: { id: string; name: string; isAdmin: boolean } | null
   ) => void;
   logout: () => void;
+  setTokenLocal: (token: string) => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined
+);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -19,8 +23,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     name: string;
     isAdmin: boolean;
   } | null>(JSON.parse(localStorage.getItem("user") || "null"));
+  const [token, setToken] = useState<string | null>("");
 
   const isAuthenticated = !!user;
+  const setTokenLocal = (token: any) => {
+    localStorage.setItem("token", token);
+    setToken(token);
+  };
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -28,34 +37,37 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(null);
   };
 
+  const validateToken = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/validate", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error("Token invalid");
+
+      const data = await response.json();
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
+    } catch (error) {
+      console.error("Token validation error:", error);
+      logout();
+    }
+  };
+
   useEffect(() => {
-    const validateToken = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setUser(null);
-        return;
-      }
-
-      try {
-        const response = await fetch("http://localhost:5000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) throw new Error("Token invalid");
-
-        const data = await response.json();
-        setUser(data);
-      } catch (error) {
-        console.error("Token validation error:", error);
-        logout();
-      }
-    };
-
     validateToken();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, isAuthenticated, setUser, logout }}>
+    <UserContext.Provider
+      value={{ user, isAuthenticated, token, setUser, logout, setTokenLocal }}
+    >
       {children}
     </UserContext.Provider>
   );

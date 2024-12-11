@@ -13,14 +13,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectTo = "/login",
   adminOnly = false,
 }) => {
-  const { user, isAuthenticated } = useUser();
+  const { user, token } = useUser();
 
   // Redirect to login if not authenticated
-  if (!isAuthenticated) {
+  if (!token) {
     return <Navigate to={redirectTo} replace />;
   }
 
   // Redirect to home if admin access is required but the user is not an admin
+  console.log("adminOnly", adminOnly);
   if (adminOnly && !user?.isAdmin) {
     return <Navigate to="/" replace />;
   }

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "./context/UserContext";
 
 const Navbar: React.FC = () => {
   const [activeLink, setActiveLink] = useState<string>("Home"); // Default active link
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    !!localStorage.getItem("token")
-  ); // Check if user is authenticated
+  const { token, logout } = useContext(UserContext)!;
+
+  const isAuthenticated = !!token; // Check if user is authenticated
   const [isAdmin, setIsAdmin] = useState<boolean>(
     JSON.parse(localStorage.getItem("isAdmin") || "false")
   ); // Check if user is admin
@@ -16,9 +17,9 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogout = () => {
+    logout();
     localStorage.removeItem("token"); // Clear JWT token from localStorage
     localStorage.removeItem("isAdmin"); // Clear admin flag
-    setIsAuthenticated(false); // Update state
     setIsAdmin(false); // Reset admin state
     navigate("/login"); // Redirect to login
   };

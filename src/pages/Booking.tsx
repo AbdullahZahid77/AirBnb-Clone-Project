@@ -18,13 +18,11 @@ const Booking: React.FC = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [listing, setListing] = useState<Listing | null>(null);
 
-  // New state for additional fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [numberOfPersons, setNumberOfPersons] = useState(1);
 
-  // Fetch listing data by ID
   useEffect(() => {
     fetch(`http://localhost:5000/api/listings/${id}`)
       .then((response) => {
@@ -54,8 +52,16 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    calculateTotalPrice();
 
+    const date1 = new Date(checkInDate);
+    const date2 = new Date(checkOutDate);
+
+    if (date1 >= date2) {
+      alert("Check-out date must be after check-in date.");
+      return;
+    }
+
+    calculateTotalPrice();
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -68,13 +74,13 @@ const Booking: React.FC = () => {
       const response = await axios.post(
         "http://localhost:5000/api/bookings",
         {
-          property: id, // Change propertyId to property
+          property: id,
           firstName,
           lastName,
           phoneNumber,
           numberOfPersons,
-          startDate: checkInDate, // Change checkInDate to startDate
-          endDate: checkOutDate, // Change checkOutDate to endDate
+          startDate: checkInDate,
+          endDate: checkOutDate,
           totalPrice,
         },
         {
@@ -86,9 +92,7 @@ const Booking: React.FC = () => {
 
       if (response.status === 201) {
         alert("Booking successful!");
-        console.log("Token in localStorage:", localStorage.getItem("token"));
         navigate("/profile");
-        // window.location.reload(); //temporary
       }
     } catch (error) {
       console.log("Error booking property:", error);
@@ -117,7 +121,6 @@ const Booking: React.FC = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Form Fields */}
         <div>
           <label htmlFor="firstName" className="block text-gray-700">
             First Name
@@ -131,7 +134,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <div>
           <label htmlFor="lastName" className="block text-gray-700">
             Last Name
@@ -145,7 +147,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <div>
           <label htmlFor="phoneNumber" className="block text-gray-700">
             Phone Number
@@ -159,7 +160,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <div>
           <label htmlFor="numberOfPersons" className="block text-gray-700">
             Number of Persons
@@ -174,7 +174,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <div>
           <label htmlFor="checkIn" className="block text-gray-700">
             Check-in Date
@@ -188,7 +187,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <div>
           <label htmlFor="checkOut" className="block text-gray-700">
             Check-out Date
@@ -202,7 +200,6 @@ const Booking: React.FC = () => {
             required
           />
         </div>
-
         <button
           type="submit"
           className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
@@ -210,7 +207,6 @@ const Booking: React.FC = () => {
           Confirm Booking
         </button>
       </form>
-
       <div className="mt-6 p-4 bg-gray-100 rounded-lg">
         <h2 className="text-xl font-semibold text-gray-800">Booking Summary</h2>
         <p className="mt-2 text-gray-700">
